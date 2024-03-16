@@ -3,11 +3,11 @@ import React from 'react';
 const Signup: React.FC = () => {
     return (
         <>
-            <div className='flex mx-auto w-[576px] border border-[##C1C1C1] rounded-[20px] h-[691px] my-10'>
+            <div className='flex mx-auto w-[576px] border border-[#C1C1C1] rounded-[20px] h-[691px] my-10'>
                 <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
                     <div className="sm:mx-auto sm:w-full sm:max-w-sm">
                         <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-                            Sign in to your account
+                            Login
                         </h2>
                     </div>
 
@@ -63,9 +63,9 @@ const Signup: React.FC = () => {
                         </form>
 
                         <p className="mt-10 text-center text-sm text-gray-500">
-                            Not a member?{' '}
+                            Don&apos;t have an account?{' '}
                             <a href="#" className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">
-                                Start a 14 day free trial
+                                Signup
                             </a>
                         </p>
                     </div>

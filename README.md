@@ -4,23 +4,43 @@
 
 Roc8 March assignment
 
+### Live Link: [Roc8 March](https://roc8-march.vercel.app/)
+
 ## Installation
 
 To clone and run this project locally, follow these steps:
 
 1. Clone the repository:
-    bash
-    git clone <repository-url>
+    ```bash
+    git clone <https://github.com/himanshuxgit/roc8_march.git>
+    ```
     
 
-2. Navigate to the project directory:
-    bash
-    cd project-directory
+2. Navigate to the project directory:  
+    ```bash
+    cd roc8_march
+    ```
     
 
 3. Install the dependencies:
-    bash
+    ```bash
     npm install
+    ```
+
+4. Create a `.env.local` file in the root directory and add the following environment variables:
+    ```bash
+    DATABASE_URL="postgresql://<username>:<password>@<host>:<port>/<database  
+    ``` 
+
+5. Run the development server:
+    ```bash
+    npm run dev
+    ```
+
+6. Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+
+
+
     
 ## Technologies Used
 - Next.js

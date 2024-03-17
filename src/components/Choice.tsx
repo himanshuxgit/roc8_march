@@ -7,7 +7,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 import React, { useEffect, useState } from "react";
-import ReactPaginate from "react-paginate";
 
 import Icon from "@mdi/react";
 import { mdiLogout } from "@mdi/js";
@@ -23,79 +22,10 @@ interface Choice {
 const Choice: React.FC = () => {
   const [choices, setChoices] = useState<Choice[]>([]);
   const [categoryIdList, setCategoryIdList] = useState<number[]>([]);
+  const [currentPage, setCurrentPage] = useState(0); // New state to track current page
+  const itemsPerPage = 6; // Could also be a prop if you want flexibility
 
   const router = useRouter();
-  console.log("choice", choices);
-
-  function Items({ currentItems }: { currentItems: any[] }) {
-    return (
-      <>
-        <div>
-          {currentItems &&
-            currentItems.map((choice) => (
-              <div key={choice.id} className="mb-4 flex ">
-                <input
-                  type="checkbox"
-                  id={`choice-${choice.id}`}
-                  value={choice.id}
-                  checked={categoryIdList.includes(choice.id)}
-                  onChange={(event) =>
-                    handleCheckboxChange(choice.id, event.target.checked)
-                  }
-                  className={
-                    categoryIdList.includes(choice.id)
-                      ? "h-6 w-6 accent-black"
-                      : "h-6 w-6 accent-[#CCCCCC]"
-                  }
-                />
-                <label
-                  className=" ml-4 text-[16px] font-[400]"
-                  htmlFor={`choice-${choice.id}`}
-                >
-                  {choice.name}
-                </label>
-              </div>
-            ))}
-        </div>
-      </>
-    );
-  }
-
-  function PaginatedItems({ itemsPerPage }: { itemsPerPage: number }) {
-    const [itemOffset, setItemOffset] = useState(0);
-
-    const endOffset = itemOffset + itemsPerPage;
-    console.log(`Loading items from ${itemOffset} to ${endOffset}`);
-
-    const currentItems = choices.slice(itemOffset, endOffset);
-
-    const pageCount = Math.ceil(choices.length / itemsPerPage);
-
-    // Invoke when user click to request another page.
-    const handlePageClick = (event: { selected: number }) => {
-      const newOffset = (event.selected * itemsPerPage) % choices.length;
-      console.log(
-        `User requested page number ${event.selected}, which is offset ${newOffset}`,
-      );
-      setItemOffset(newOffset);
-    };
-
-    return (
-      <>
-        <Items currentItems={currentItems} />
-        <ReactPaginate
-          breakLabel="..."
-          nextLabel=" >"
-          onPageChange={handlePageClick}
-          pageRangeDisplayed={7}
-          pageCount={pageCount}
-          previousLabel="< "
-          renderOnZeroPageCount={null}
-          marginPagesDisplayed={0}
-        />
-      </>
-    );
-  }
 
   useEffect(() => {
     fetchData();
@@ -146,7 +76,6 @@ const Choice: React.FC = () => {
   };
 
   const handleCheckboxChange = async (choiceId: number, isChecked: boolean) => {
-    console.log(choiceId, isChecked);
 
     if (isChecked) {
       try {
@@ -202,6 +131,65 @@ const Choice: React.FC = () => {
     }
   };
 
+  const handlePageClick = (newPage: number) => {
+    setCurrentPage(newPage);
+  };
+
+
+  const pageCount = Math.ceil(choices.length / itemsPerPage);
+
+  const handleFirstPage = () => {
+    handlePageClick(0);
+  };
+
+  const handleLastPage = () => {
+    handlePageClick(pageCount - 1);
+  };
+
+  const handlePreviousPage = () => {
+    setCurrentPage(currentPage > 0 ? currentPage - 1 : 0);
+  };
+
+  const handleNextPage = () => {
+    setCurrentPage(currentPage < pageCount - 1 ? currentPage + 1 : pageCount - 1);
+  };
+
+  const currentItems = choices.slice(currentPage * itemsPerPage, (currentPage + 1) * itemsPerPage);
+
+  const pageNumbersToShow = 5; // Number of page numbers to show around the current page
+  let pageNumbers = [];
+
+  // Handle the case when there are fewer pages than the number of page numbers to show
+  if (pageCount <= pageNumbersToShow) {
+    for (let i = 0; i < pageCount; i++) {
+      pageNumbers.push(i + 1);
+    }
+  } else {
+    // Add the first page number
+    pageNumbers.push(1);
+
+    // Add the ellipsis if the current page is not in the first or last set of page numbers
+    if (currentPage >= pageNumbersToShow - 1) {
+      pageNumbers.push('...');
+    }
+
+    // Add the page numbers around the current page
+    const startIndex = Math.max(2, currentPage - Math.floor(pageNumbersToShow / 2) + 1);
+    const endIndex = Math.min(pageCount - 1, startIndex + pageNumbersToShow - 3);
+    for (let i = startIndex; i <= endIndex; i++) {
+      pageNumbers.push(i);
+    }
+
+    // Add the ellipsis if the current page is not in the last set of page numbers
+    if (currentPage < pageCount - 2) {
+      pageNumbers.push('...');
+    }
+
+    // Add the last page number if it's not already included
+    if (pageNumbers[pageNumbers.length - 1] !== pageCount) {
+      pageNumbers.push(pageCount);
+    }
+  }
   return (
     <>
       <div className="mr-4 mt-1 flex justify-end">
@@ -213,11 +201,11 @@ const Choice: React.FC = () => {
           />
         </button>
       </div>
+      <div className=" mx-auto my-10 flex h-[658px] w-[576px] rounded-[20px] border border-[#C1C1C1]">
+        <div className="justify-center -mt-28 ml-4 flex min-h-full flex-1 flex-col px-6 py-1 lg:px-8">
 
-      <div className="mx-auto my-10 flex h-[658px] w-[576px] rounded-[20px] border border-[#C1C1C1]">
-        <div className="justify-cente flex min-h-full flex-1 flex-col px-6 py-1 lg:px-8">
           <div className="sm:mx-auto">
-            <h2 className="mt-10 text-center text-[32px] font-[600] leading-9 tracking-tight text-gray-900">
+            <h2 className="mt-10 mb-4 text-center text-[32px] font-[600] leading-9 tracking-tight text-gray-900">
               Please mark your interests!
             </h2>
           </div>
@@ -227,14 +215,40 @@ const Choice: React.FC = () => {
               We will keep you notified
             </p>
           </div>
-
           <p className="mt-12 text-[20px] font-[500]">My saved interests!</p>
           <div className="checkboxes mt-4">
-            <PaginatedItems itemsPerPage={6} />
+            {currentItems.map((choice) => (
+              <div key={choice.id} className="flex items-center mb-4">
+                <input
+                  type="checkbox"
+                  id={`choice-${choice.id}`}
+                  checked={categoryIdList.includes(choice.id)}
+                  onChange={(e) => handleCheckboxChange(choice.id, e.target.checked)}
+                  className="form-checkbox h-6 w-6 border-gray-300 rounded accent-black"
+                />
+                <label htmlFor={`choice-${choice.id}`} className="ml-2 text-lg">
+                  {choice.name}
+                </label>
+              </div>
+            ))}
           </div>
-        </div>
-      </div>
-    </>
+          <div className="flex justify-start mt-8 space-x-2">
+            <button onClick={handleFirstPage} disabled={currentPage === 0} className="text-gray-500 text-xl px-2 py-1">&lt;&lt;</button>
+            <button onClick={handlePreviousPage} disabled={currentPage === 0} className="text-gray-500 text-xl px-2 py-1">&lt;</button>
+            {pageNumbers.map(number => (
+              <button
+                key={number}
+                onClick={() => handlePageClick(number - 1)}
+                disabled={currentPage === number - 1}
+                className={`text-xl px-2 py-1 ${currentPage === number - 1 ? 'text-black' : 'text-gray-500'}`}
+              >
+                {number}
+              </button>
+            ))}
+            <button onClick={handleNextPage} disabled={currentPage >= pageCount - 1} className="text-gray-500 text-xl px-2 py-1">&gt;</button>
+            <button onClick={handleLastPage} disabled={currentPage >= pageCount - 1} className="text-gray-500 text-xl px-2 py-1">&gt;&gt;</button>
+          </div>
+        </div></div></>
   );
 };
 

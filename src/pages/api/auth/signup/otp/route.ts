@@ -41,12 +41,30 @@ export default async function handler(
           ciphers: "SSLv3",
         },
       });
+
+      await new Promise((resolve, reject) => {
+        // verify connection configuration
+        transporter.verify(function (error: any, success: unknown) {
+            if (error) {
+                console.log(error);
+                reject(error);
+            } else {
+                console.log("Server is ready to take our messages");
+                resolve(success);
+            }
+        });
+    });
   
       // Setup email data
       let mailOptions = {
-        from: '"Roc8" <Sonner121@outlook.com>', // sender address
+        from: '"Himanshu-Roc8" <Sonner121@outlook.com>', // sender address
         to: `hkashyap494@gmail.com, ${email}`, // list of receivers
-        subject: "Roc8 OTP", // Subject line
+        subjecrror) {
+          return console.log(error);
+        }
+      },
+    );
+  });t: "Roc8 OTP", // Subject line
         text: `Here is your OTP: . ${otp.toString()}`, // plain text body
         html: `Here is your OTP: . ${otp.toString()}`, // html body
       };
@@ -57,12 +75,7 @@ export default async function handler(
       transporter.sendMail(
         mailOptions,
         (error: any, info: { messageId: any }) => {
-          if (error) {
-            return console.log(error);
-          }
-        },
-      );
-    });
+          if (e
 
     //   await new Promise((resolve, reject) => {
     //     // send mail

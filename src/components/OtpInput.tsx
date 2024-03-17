@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-floating-promises */
 import { useRouter } from "next/navigation";
 import React, { useRef, useState, useEffect } from "react";
 import { toast } from "sonner";

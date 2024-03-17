@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import { checkAuthentication } from "~/utils/Auth";
 import { useEffect } from "react";

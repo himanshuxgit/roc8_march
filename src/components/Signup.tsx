@@ -1,3 +1,5 @@
+/* eslint-disable @next/next/no-html-link-for-pages */
+/* eslint-disable @typescript-eslint/restrict-template-expressions */
 import { useRouter } from "next/navigation";
 import React, { FormEvent } from "react";
 

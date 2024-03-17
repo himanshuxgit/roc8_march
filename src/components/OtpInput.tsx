@@ -18,25 +18,6 @@ const OtpInput: React.FC<OtpInputProps> = ({ name, email, pass }) => {
   const hasFetchedData = useRef(false);
   const router = useRouter();
 
-  const submitOtp = async () => {
-    // try {
-    //   const response = await fetch("/api/auth/signup/otpVerify/route", {
-    //     method: "POST",
-    //     body: JSON.stringify({
-    //       email: email,
-    //     }),
-    //   });
-    //   if (response.ok) {
-    //     response.json().then(async (data) => {
-    //       console.log(data.res);
-    //     });
-    //   } else {
-    //     console.error("Error fetching data:");
-    //   }
-    // } catch (error) {
-    //   console.error("Error fetching data:", error);
-    // }
-  };
 
   const fetchData = async () => {
     try {
@@ -109,10 +90,9 @@ const OtpInput: React.FC<OtpInputProps> = ({ name, email, pass }) => {
     }
   };
 
-  const handleSumit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     // Handle submission logic here
-    console.log(password.join(""));
     const otp = password.join("");
 
     try {
@@ -148,7 +128,7 @@ const OtpInput: React.FC<OtpInputProps> = ({ name, email, pass }) => {
         Enter the 8 digit code you have received on {email}{" "}
       </p>
       <form
-        onSubmit={handleSumit}
+        onSubmit={handleSubmit}
         className="flex flex-col items-center justify-center"
       >
         <div className="mb-8 flex space-x-2">

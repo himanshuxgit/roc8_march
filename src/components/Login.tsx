@@ -69,7 +69,6 @@ const Login: React.FC = () => {
 
     if (response.ok) {
       response.json().then((data) => {
-        console.log(data);
         toast.success("Logged in successfully");
 
         localStorage.setItem("isLoggedIn", "true");

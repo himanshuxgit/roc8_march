@@ -3,10 +3,7 @@ function checkAuthentication(): boolean {
 
   if (typeof window !== "undefined") {
     isAuthenticated = localStorage.getItem("isLoggedIn") === "true";
-    console.log(
-      "isAuthenticatedisAuthenticatedisAuthenticatedisAuthenticated",
-      isAuthenticated,
-    );
+
   }
 
   return isAuthenticated;

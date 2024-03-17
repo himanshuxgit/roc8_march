@@ -8,7 +8,6 @@ export default function isAuth(Component: any) {
   return function IsAuth(props: any) {
     const router = useRouter();
     const auth = checkAuthentication();
-    console.log("auth", auth);
     
 
     useEffect(() => {

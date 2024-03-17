@@ -42,7 +42,6 @@ const Choice: React.FC = () => {
 
       if (response.ok) {
         response.json().then(async (data) => {
-          console.log(data.res);
           setChoices(data.res as Choice[]);
 
           const userChoicesResponse = await fetch(
@@ -54,13 +53,11 @@ const Choice: React.FC = () => {
 
           if (userChoicesResponse.ok) {
             const userChoicesData = await userChoicesResponse.json();
-            console.log(userChoicesData.res);
 
             const categoryIdList = userChoicesData.res.map(
               (choice: { categoryId: any }) => choice.categoryId,
             );
             setCategoryIdList(categoryIdList);
-            console.log(categoryIdList);
 
             // Process the userChoicesData as needed
           } else {

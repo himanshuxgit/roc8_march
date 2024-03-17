@@ -157,7 +157,7 @@ const Choice: React.FC = () => {
   const currentItems = choices.slice(currentPage * itemsPerPage, (currentPage + 1) * itemsPerPage);
 
   const pageNumbersToShow = 5; // Number of page numbers to show around the current page
-  let pageNumbers = [];
+  const pageNumbers = [];
 
   // Handle the case when there are fewer pages than the number of page numbers to show
   if (pageCount <= pageNumbersToShow) {

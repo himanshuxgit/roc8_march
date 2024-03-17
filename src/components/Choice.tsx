@@ -235,12 +235,14 @@ const Choice: React.FC = () => {
           <div className="flex justify-start mt-8 space-x-2">
             <button onClick={handleFirstPage} disabled={currentPage === 0} className="text-gray-500 text-xl px-2 py-1">&lt;&lt;</button>
             <button onClick={handlePreviousPage} disabled={currentPage === 0} className="text-gray-500 text-xl px-2 py-1">&lt;</button>
-            {pageNumbers.map(number => (
+            {pageNumbers.map((number) => (
               <button
                 key={number}
-                onClick={() => handlePageClick(number - 1)}
-                disabled={currentPage === number - 1}
-                className={`text-xl px-2 py-1 ${currentPage === number - 1 ? 'text-black' : 'text-gray-500'}`}
+                onClick={() => handlePageClick(Number(number) - 1)}
+                disabled={currentPage === Number(number) - 1}
+                className={`text-xl px-2 py-1 ${
+                  currentPage === Number(number) - 1 ? 'text-black' : 'text-gray-500'
+                }`}
               >
                 {number}
               </button>

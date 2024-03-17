@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/adjacent-overload-signatures */
 /* eslint-disable @next/next/no-html-link-for-pages */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
@@ -22,13 +24,38 @@ const Login: React.FC = () => {
     }
   }, []);
 
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    // Form submission logic...
+  }
+
+  // Function to handle signup action
+  async function handleSignupClick() {
+    router.push("/signup");
+
+    try {
+      const response = await fetch("https://pgversion.onrender.com/api/pg-version");
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch data');
+      }
+
+      const data = await response.json();
+
+      console.log(data);
+
+    } catch (error) {
+      console.error(error);
+      toast.error("An error occurred while processing your request.");
+    }
+  }
+
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
     const formData = new FormData(event.currentTarget);
 
-    console.log(formData.get("email"));
-    console.log(formData.get("password"));
+
 
     const response = await fetch("/api/auth/login/route", {
       method: "POST",
@@ -138,13 +165,13 @@ const Login: React.FC = () => {
             </form>
 
             <p className="mt-10 text-center text-[16px] font-[400] text-[#333333]">
-              Don&apos;t have an account?{" "}
-              <a
-                href="/signup"
-                className="text-[16px] font-[500] leading-6 text-black"
+              Don't have an account?{" "}
+              <span
+                onClick={handleSignupClick}
+                className="text-[16px] font-[500] leading-6 text-black underline cursor-pointer"
               >
                 SIGN UP
-              </a>
+              </span>
             </p>
           </div>
         </div>

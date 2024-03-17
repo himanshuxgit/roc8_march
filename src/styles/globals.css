@@ -1,3 +1,38 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+ul {
+  display: flex;
+  width: max-content;
+  margin-left: -10px;
+  margin-top: 100px;
+}
+
+li {
+  margin-left: 20px;
+}
+
+
+.selected {
+  font-weight: 500;
+  color: black;
+}
+
+/* .checkbox-item {
+  position: relative;
+}
+
+.checkbox-custom {
+  display: flex;
+  width: 16px;
+  height: 16px;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  cursor: pointer;
+}
+
+.checkbox-custom.checked {
+  background-color: black;
+} */
+

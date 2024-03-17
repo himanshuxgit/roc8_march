@@ -24,27 +24,32 @@ const Login: React.FC = () => {
     }
   }, []);
 
+  useEffect(() => {
+    fetchData();
+  }, []);
 
+  const fetchData = async () => {
+    try {
+      const response = await fetch("/api/auth/signup/dbSpinUp/route", {
+        method: "POST",
+        body: JSON.stringify({
+        }),
+      });
+
+      if (response.ok) {
+        console.log("DB Spin Up Successful");
+        
+      } else {
+        console.error("Error fetching data:");
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
 
   // Function to handle signup action
   async function handleSignupClick() {
     router.push("/signup");
-
-    try {
-      const response = await fetch("https://pgversion.onrender.com/api/pg-version");
-
-      if (!response.ok) {
-        throw new Error('Failed to fetch data');
-      }
-
-      const data = await response.json();
-
-      console.log(data);
-
-    } catch (error) {
-      console.error(error);
-      toast.error("An error occurred while processing your request.");
-    }
   }
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {

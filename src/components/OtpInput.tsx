@@ -1,13 +1,72 @@
-// otp-input.tsx
+import { useRouter } from "next/navigation";
+import React, { useRef, useState, useEffect } from "react";
+import { toast } from "sonner";
 
-import React, { useRef, useState, useEffect } from 'react';
-
-const maxPinLength = 8; // Adjust this value as needed
+const maxPinLength = 8;
 
 type InputRef = Record<number, HTMLInputElement | null>;
 
-const OtpInput = () => {
-  const [password, setPassword] = useState<number[]>(Array(maxPinLength).fill(-1));
+interface OtpInputProps {
+  name: string;
+  email: string;
+  pass: string;
+}
+
+const OtpInput: React.FC<OtpInputProps> = ({ name, email, pass }) => {
+  const hasFetchedData = useRef(false);
+  const router = useRouter();
+
+  const submitOtp = async () => {
+    // try {
+    //   const response = await fetch("/api/auth/signup/otpVerify/route", {
+    //     method: "POST",
+    //     body: JSON.stringify({
+    //       email: email,
+    //     }),
+    //   });
+    //   if (response.ok) {
+    //     response.json().then(async (data) => {
+    //       console.log(data.res);
+    //     });
+    //   } else {
+    //     console.error("Error fetching data:");
+    //   }
+    // } catch (error) {
+    //   console.error("Error fetching data:", error);
+    // }
+  };
+
+  const fetchData = async () => {
+    try {
+      const response = await fetch("/api/auth/signup/otp/route", {
+        method: "POST",
+        body: JSON.stringify({
+          email: email,
+        }),
+      });
+
+      if (response.ok) {
+        response.json().then(async (data) => {
+          console.log(data.res);
+        });
+      } else {
+        console.error("Error fetching data:");
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  useEffect(() => {
+    if (!hasFetchedData.current) {
+      fetchData();
+      hasFetchedData.current = true;
+    }
+  }, []);
+
+  const [password, setPassword] = useState<number[]>(
+    Array(maxPinLength).fill(-1),
+  );
   const inpRefs = useRef<InputRef>({});
   const [activeInput, setActiveInput] = useState<number>(-1);
 
@@ -30,8 +89,11 @@ const OtpInput = () => {
     }
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
-    const value = parseInt(e.target.value[e.target.value.length - 1] ?? '');
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    index: number,
+  ) => {
+    const value = parseInt(e.target.value[e.target.value.length - 1] ?? "");
     if (!isNaN(value)) {
       const newPass = [...password];
       newPass[index] = value;
@@ -45,29 +107,63 @@ const OtpInput = () => {
     }
   };
 
-  const handleSumit = (e: React.FormEvent) => {
+  const handleSumit = async (e: React.FormEvent) => {
     e.preventDefault();
     // Handle submission logic here
-    console.log(password.join(''));
+    console.log(password.join(""));
+    const otp = password.join("");
+
+    try {
+      const response = await fetch("/api/auth/signup/otpVerify/route", {
+        method: "POST",
+        body: JSON.stringify({
+          email: email,
+          otp: otp,
+          name: name,
+          password: pass,
+        }),
+      });
+
+      if (response.ok) {
+        response.json().then(async (data) => {
+          console.log(data.res);
+          toast.success("Otp verified");
+          router.push("/");
+        });
+      } else {
+        console.error("Error fetching data:");
+        toast.error("Invalid Otp");
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
   };
 
   return (
-    <div className='flex flex-col items-center justify-center p-4'>
-      <h2 className='text-2xl font-bold mb-4'>Verify your email</h2>
-      <p className='mb-8'>Enter the 8 digit code you have received on swa***@gmail.com</p>
-      <form onSubmit={handleSumit} className='flex flex-col items-center justify-center'>
-        <div className='flex space-x-2 mb-8'>
+    <div className="flex flex-col items-center justify-center p-4">
+      <h2 className="mb-4 text-2xl font-bold">Verify your email</h2>
+      <p className="mb-8">
+        Enter the 8 digit code you have received on {email}{" "}
+      </p>
+      <form
+        onSubmit={handleSumit}
+        className="flex flex-col items-center justify-center"
+      >
+        <div className="mb-8 flex space-x-2">
           {password.map((digit, index) => (
-            <div key={index} className='w-10 h-14 bg-white border-2 border-gray-300 rounded'>
+            <div
+              key={index}
+              className="h-14 w-10 rounded border-2 border-gray-300 bg-white"
+            >
               <input
-                ref={(el) => inpRefs.current[index] = el}
+                ref={(el) => (inpRefs.current[index] = el)}
                 onFocus={() => setActiveInput(index)}
                 onBlur={() => setActiveInput(-1)}
                 onKeyDown={(e) => handleKeyDown(e, index)}
                 onChange={(e) => handleChange(e, index)}
-                className='w-full h-full text-center text-xl outline-none bg-transparent'
+                className="h-full w-full bg-transparent text-center text-xl outline-none"
                 id={`pin_${index}`}
-                type='text' // Changed to text to handle individual digit input
+                type="text" // Changed to text to handle individual digit input
                 value={digit !== -1 ? digit : ""}
                 autoComplete="off"
                 maxLength={1}
@@ -75,7 +171,11 @@ const OtpInput = () => {
             </div>
           ))}
         </div>
-        <button type='submit' className='w-full bg-black text-white p-3 rounded text-lg uppercase tracking-wider hover:bg-gray-700'>
+        <button
+          type="submit"
+          className="w-full rounded bg-black p-3 text-lg uppercase tracking-wider text-white hover:bg-gray-700"
+          // onClick={submitOtp}
+        >
           Verify
         </button>
       </form>

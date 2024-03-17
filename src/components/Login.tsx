@@ -37,7 +37,7 @@ const Login: React.FC = () => {
       });
 
       if (response.ok) {
-        console.log("DB Spin Up Successful");
+        console.log("DB  Up Successful");
         
       } else {
         console.error("Error fetching data:");

@@ -5,6 +5,7 @@
 import React, { FormEvent, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { checkAuthentication } from "~/utils/Auth";
+import { toast } from "sonner";
 
 const Login: React.FC = () => {
   const router = useRouter();
@@ -12,15 +13,6 @@ const Login: React.FC = () => {
   const [passwordShown, setPasswordShown] = useState(false);
 
   function togglePasswordVisibility() {
-    // const passwordInput = document.querySelector(
-    //   'input[type="password"]'
-    // ) as HTMLInputElement;
-
-    // if (passwordInput.type === "password") {
-    //   passwordInput.type = "text";
-    // } else {
-    //   passwordInput.type = "password";
-    // }
     setPasswordShown(!passwordShown);
   }
 
@@ -49,6 +41,7 @@ const Login: React.FC = () => {
     if (response.ok) {
       response.json().then((data) => {
         console.log(data);
+        toast.success("Logged in successfully");
 
         localStorage.setItem("isLoggedIn", "true");
         localStorage.setItem("email", formData.get("email")?.toString() ?? "");
@@ -57,6 +50,7 @@ const Login: React.FC = () => {
         router.push("/choices");
       });
     } else {
+      toast.error("Invalid credentials");
       localStorage.setItem("isLoggedIn", "false");
     }
   }
@@ -113,7 +107,7 @@ const Login: React.FC = () => {
                     Password
                   </label>
                 </div>
-                <div className="mt-2 relative">
+                <div className="relative mt-2">
                   <input
                     id="password"
                     name="password"
@@ -125,7 +119,7 @@ const Login: React.FC = () => {
                   />
                   <button
                     type="button"
-                    className="absolute inset-y-0 right-0 px-2 py-1.5  hover:text-gray-600 focus:outline-none text-[16px] font-[400] underline"
+                    className="absolute inset-y-0 right-0 px-2 py-1.5  text-[16px] font-[400] underline hover:text-gray-600 focus:outline-none"
                     onClick={togglePasswordVisibility}
                   >
                     {passwordShown ? "Hide" : "Show"}

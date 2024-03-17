@@ -7,6 +7,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 
 import { PrismaClient } from "@prisma/client";
+const bcrypt = require("bcrypt");
 const nodemailer = require("nodemailer");
 
 const prisma = new PrismaClient();
@@ -37,14 +38,18 @@ export default async function handler(
         console.log("Otp verified", existingUser);
 
         res.status(200).json({ message: "Otp verified" });
-        const user = await prisma.user.create({
-          data: {
-            name,
-            email,
-            password,
-          },
+        const saltRounds = 10;
+
+        bcrypt.hash(password, saltRounds, async function (err: any, hash: any) {
+          const user = await prisma.user.create({
+            data: {
+              name,
+              email,
+              password: hash,
+            },
+          });
+          res.redirect("/login");
         });
-        res.redirect("/login");
       } else {
         res.status(400).json({ message: "Invalid Otp" });
       }

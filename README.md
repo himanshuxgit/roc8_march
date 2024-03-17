@@ -1,29 +1,43 @@
-# Create T3 App
+# Roc8 March 
 
-This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
+## Description
 
-## What's next? How do I make an app with this?
+Roc8 March assignment
 
-We try to keep this project as simple as possible, so you can start with just the scaffolding we set up for you, and add additional things later when they become necessary.
+## Installation
 
-If you are not familiar with the different technologies used in this project, please refer to the respective docs. If you still are in the wind, please join our [Discord](https://t3.gg/discord) and ask for help.
+To clone and run this project locally, follow these steps:
 
-- [Next.js](https://nextjs.org)
-- [NextAuth.js](https://next-auth.js.org)
-- [Prisma](https://prisma.io)
-- [Drizzle](https://orm.drizzle.team)
-- [Tailwind CSS](https://tailwindcss.com)
-- [tRPC](https://trpc.io)
+1. Clone the repository:
+    bash
+    git clone <repository-url>
+    
 
-## Learn More
+2. Navigate to the project directory:
+    bash
+    cd project-directory
+    
 
-To learn more about the [T3 Stack](https://create.t3.gg/), take a look at the following resources:
+3. Install the dependencies:
+    bash
+    npm install
+    
+## Technologies Used
+- Next.js
+- PostgreSQL (Neon)
+- Prisma
+- Tailwind CSS
+- NodeMailer
+- Faker.js
 
-- [Documentation](https://create.t3.gg/)
-- [Learn the T3 Stack](https://create.t3.gg/en/faq#what-learning-resources-are-currently-available) — Check out these awesome tutorials
 
-You can check out the [create-t3-app GitHub repository](https://github.com/t3-oss/create-t3-app) — your feedback and contributions are welcome!
+## Approach
 
-## How do I deploy this?
 
-Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
+I was assigned to develop four screens based on designs provided in Figma for a project, opting to use the T3 stack but I replaced the API approach with Next.js API routes and Prisma for database interactions. For styling, I used Tailwind CSS, PostgreSQL hosted by Neon as database and for the frontend framework, I chose Next.js.
+
+Firstly, I tackled the signup screen, which required users to enter their email, password, and name. Upon submission, the information led users to an OTP screen. To implement this, I generated an  eight-digit OTP and utilized NodeMailer to send the otp to the user's email. This OTP, along with the user's email, was stored in the PostgreSQL database using Prisma for future verification.
+
+Once the user received and input the OTP on the OTP screen, a verification process ensued. If successful, a notification indicated the OTP was verified; otherwise, a message informed the user of verification failure. Successful verification redirected users to the login screen.
+
+On the login screen, users were prompted to enter their email and password. These credentials were then verified against the stored data in the database. If matched, the user was directed to a protected route named "choices" that could not be accessed without logging in. This choices screen displayed a list of categories generated with Faker.js. The list displayed is a paginated list.Users could select a category, which was then saved to the database. Upon returning, selected categories were retrieved and displayed to the user, ensuring a personalized experience.

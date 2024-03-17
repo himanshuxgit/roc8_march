@@ -59,12 +59,7 @@ export default async function handler(
       let mailOptions = {
         from: '"Himanshu-Roc8" <Sonner121@outlook.com>', // sender address
         to: `hkashyap494@gmail.com, ${email}`, // list of receivers
-        subjecrror) {
-          return console.log(error);
-        }
-      },
-    );
-  });t: "Roc8 OTP", // Subject line
+        subject: "Roc8 OTP", // Subject line
         text: `Here is your OTP: . ${otp.toString()}`, // plain text body
         html: `Here is your OTP: . ${otp.toString()}`, // html body
       };
@@ -75,7 +70,12 @@ export default async function handler(
       transporter.sendMail(
         mailOptions,
         (error: any, info: { messageId: any }) => {
-          if (e
+          if (error) {
+            return console.log(error);
+          }
+        },
+      );
+    });
 
     //   await new Promise((resolve, reject) => {
     //     // send mail

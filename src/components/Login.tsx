@@ -24,10 +24,7 @@ const Login: React.FC = () => {
     }
   }, []);
 
-  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    // Form submission logic...
-  }
+
 
   // Function to handle signup action
   async function handleSignupClick() {

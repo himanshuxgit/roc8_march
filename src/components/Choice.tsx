@@ -9,7 +9,11 @@
 import React, { useEffect, useState } from "react";
 import ReactPaginate from "react-paginate";
 
+import Icon from "@mdi/react";
+import { mdiLogout } from "@mdi/js";
+
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 interface Choice {
   id: number;
@@ -19,6 +23,8 @@ interface Choice {
 const Choice: React.FC = () => {
   const [choices, setChoices] = useState<Choice[]>([]);
   const [categoryIdList, setCategoryIdList] = useState<number[]>([]);
+
+  const router = useRouter();
   console.log("choice", choices);
 
   function Items({ currentItems }: { currentItems: any[] }) {
@@ -27,7 +33,7 @@ const Choice: React.FC = () => {
         <div>
           {currentItems &&
             currentItems.map((choice) => (
-              <div key={choice.id} className="flex mb-4 ">
+              <div key={choice.id} className="mb-4 flex ">
                 <input
                   type="checkbox"
                   id={`choice-${choice.id}`}
@@ -36,10 +42,14 @@ const Choice: React.FC = () => {
                   onChange={(event) =>
                     handleCheckboxChange(choice.id, event.target.checked)
                   }
-                  className={categoryIdList.includes(choice.id) ? "accent-black h-6 w-6" : "accent-[#CCCCCC] h-6 w-6"}
+                  className={
+                    categoryIdList.includes(choice.id)
+                      ? "h-6 w-6 accent-black"
+                      : "h-6 w-6 accent-[#CCCCCC]"
+                  }
                 />
                 <label
-                  className=" text-[16px] font-[400] ml-4"
+                  className=" ml-4 text-[16px] font-[400]"
                   htmlFor={`choice-${choice.id}`}
                 >
                   {choice.name}
@@ -181,8 +191,29 @@ const Choice: React.FC = () => {
     }
   };
 
+  const logout = async () => {
+    try {
+      toast.success("Logged out successfully");
+      localStorage.removeItem("isLoggedIn");
+      router.push("/");
+    } catch (error) {
+      toast.error("Error logging out");
+      console.error("Error logging out:", error);
+    }
+  };
+
   return (
     <>
+      <div className="mr-4 mt-1 flex justify-end">
+        <button onClick={logout}>
+          <Icon
+            path={mdiLogout}
+            size={1.3}
+            className="cursor-pointer rounded-full bg-gray-200 p-1 hover:bg-gray-300"
+          />
+        </button>
+      </div>
+
       <div className="mx-auto my-10 flex h-[658px] w-[576px] rounded-[20px] border border-[#C1C1C1]">
         <div className="justify-cente flex min-h-full flex-1 flex-col px-6 py-1 lg:px-8">
           <div className="sm:mx-auto">
